@@ -1,0 +1,9 @@
+#ifndef NNG_USE_CLOCKID
+#if defined(CLOCK_MONOTONIC)
+#define NNG_USE_CLOCKID CLOCK_MONOTONIC
+#elif defined(CLOCK_REALTIME)
+#define NNG_USE_CLOCKID CLOCK_REALTIME
+#else
+#define NNG_USE_GETTIMEOFDAY
+#endif
+#endif
