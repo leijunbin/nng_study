@@ -1,10 +1,11 @@
 #include "core/nng_impl.h"
 
-#include <time.h>
+#include <string.h>
+#include <errno.h>
 
 #if !defined(NNG_USE_GETTIMEOFDAY)
 
-#include <string.h>
+#include <time.h>
 
 nni_time nni_clock(void)
 {
@@ -41,6 +42,29 @@ void nni_msleep(nni_duration ms)
     }
 }
 
+#else // NNG_USE_GETTIMEOFDAY
+
+#include <sys/time.h>
+#include <poll.h>
+
+nni_time nni_clock(void)
+{
+    nni_time ms;
+
+    struct timeval tv;
+
+    if(gettimeofday(&tv, NULL) != 0)
+    {
+        nni_panic("gettimeofday failed: %s", strerror(errno));
+    }
+
+    ms = tv.tv_sec;
+    ms *= 1000;
+    ms += (tv.tv_usec / 1000);
+
+    return ms;
+}
+
 // 跨平台、跨架构睡眠函数可能会出现两个问题：
 // 1. posix接口不强制支持nanosleep，导致睡眠的精度不够（只有秒级）。
 // 2. 可以使用pthread库利用条件变量去实现，但是这样会另行分配内存，且
@@ -54,11 +78,24 @@ void nni_msleep(nni_duration ms)
 // 4. 相关时钟的现代实现的可能缺失也是一个问题，导致计时与执行并不在同
 //    一个核心之上，在linux 2.2之后才改进了相关问题（现代时钟）。
 // 综合考虑使用poll i/o复用的方式实现。
-// void nni_msleep(nni_duration ms)
-// {
+void nni_msleep(nni_duration ms)
+{
+    struct pollfd pfd;
 
-// }
+    nni_time now;
+    nni_time expire;
 
-#else // NNG_USE_GETTIMEOFDAY
+    pfd.fd = -1;
+    pfd.events = 0;
 
-#endif
+    now = nni_clock();
+    expire = now + ms;
+
+    while(now < expire)
+    {
+        (void)poll(&pfd, 0, (int)(expire - now));
+        now = nni_clock();
+    }
+}
+
+#endif // NNG_USE_GETTIMEOFDAY

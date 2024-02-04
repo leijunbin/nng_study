@@ -6,10 +6,14 @@
 #ifndef CORE_NNG_IMPL_H
 #define CORE_NNG_IMPL_H
 
+#include "nng/nng.h"
+
 #include "core/defs.h"
 
 #include "core/platform.h"
 
+#include "list.h"
 #include "core/panic.h"
+#include "core/thread.h"
 
 #endif // CORE_NNG_IMPL_H

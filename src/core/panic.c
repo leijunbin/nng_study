@@ -1,6 +1,7 @@
 #include "core/nng_impl.h"
 
 #include <stdarg.h>
+#include <stdio.h>
 
 void nni_panic(const char *fmt, ...)
 {
