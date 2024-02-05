@@ -12,8 +12,9 @@
 
 #include "core/platform.h"
 
-#include "list.h"
+#include "core/list.h"
 #include "core/panic.h"
+#include "core/taskq.h"
 #include "core/thread.h"
 
 #endif // CORE_NNG_IMPL_H

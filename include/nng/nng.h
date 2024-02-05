@@ -29,7 +29,7 @@ enum nng_errno_enum
     NNG_EBUSY = 4,
     NNG_ETIMEDOUT = 5,
     NNG_ECONNREFUSED = 6,
-    NNG_CLOSED = 7,
+    NNG_ECLOSED = 7,
     NNG_EAGAIN = 8,
     NNG_ENOTSUP = 9,
     NNG_EADDRINUSE = 10,

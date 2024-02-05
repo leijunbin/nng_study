@@ -7,6 +7,8 @@
 // 不同平台的调试支持
 extern void nni_plat_abort();
 extern void nni_plat_println(const char *);
+extern void nni_plat_printf(const char *, ...);
+extern const char *nni_plat_strerror(int);
 
 // 不同平台的内存管理支持
 extern void *nni_alloc(size_t);
@@ -36,9 +38,9 @@ extern void nni_plat_cv_fini(nni_plat_cv *);
 extern void nni_plat_cv_wake(nni_plat_cv *);
 extern void nni_plat_cv_wake1(nni_plat_cv *);
 extern void nni_plat_cv_wait(nni_plat_cv *);
-extern void nni_plat_cv_until(nni_plat_cv *);
+extern int nni_plat_cv_until(nni_plat_cv *, nni_time);
 
-extern void nni_plat_thr_init(nni_plat_thr *, void (*)(void *), void *);
+extern int nni_plat_thr_init(nni_plat_thr *, void (*)(void *), void *);
 extern void nni_plat_thr_fini(nni_plat_thr *);
 extern bool nni_plat_thr_is_self(nni_plat_thr *);
 extern void nni_plat_thr_set_name(nni_plat_thr *, const char *);

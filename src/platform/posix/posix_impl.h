@@ -3,6 +3,8 @@
 
 #include "platform/posix/posix_config.h"
 
+extern int nni_plat_errno(int);
+
 #include <pthread.h>
 
 struct nni_plat_thr
@@ -23,7 +25,7 @@ struct nni_plat_cv
     nni_plat_mtx *mtx;
 };
 
-// 初始化epoll文件描述符
+// 初始化i/o后端
 extern int nni_posix_pollq_sysinit(void);
 extern void nni_posix_pollq_sysfini(void);
 // 初始化
